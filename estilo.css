@@ -1,0 +1,82 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+.profile-container {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.profile-img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+.profile-name {
+    font-size: 24px;
+    font-weight: bold;
+}
+.profile-info {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #666;
+}
+.profile-buttons {
+    margin-top: 20px;
+}
+.profile-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+.edit-btn {
+    background-color: #007bff;
+    color: white;
+    margin-right: 10px;
+}
+.logout-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.Volver{
+    background-color: #3d2a3775;
+    color: white;
+    padding: 10px 5px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    cursor: pointer;
+}
+
+.retun{
+    width: 200px;
+    height: 100px;
+    position: relative;
+    top: 260px;
+    right: 250px;
+    
+}

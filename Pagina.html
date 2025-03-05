@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academy</title>
+    <link rel="stylesheet" href="estilos.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Anta&family=Madimi+One&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Oswald:wght@200..700&family=Paytone+One&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+    </style>
+</head>
+<body>
+    <header class="titulo">
+        <h1 class="foro">FORO ESTUDIANTIL</h1>
+        <img class="escudo" src="/imagen/escudo.jpeg" alt="">
+    </header> 
+
+    <nav class="navbar">
+        <ul>
+            <li class="Even"><a href="#">Eventos</a></li>
+            <li class="Noti"><a href="noticias.html">Noticias y novedades</a></li>
+            <li class="Fot"><a href="#">fotos</a></li>
+            <li class="Vid"><a href="#">Videos</a></li>
+            <li class="Club"><a href="clubles.html">Clubes</a></li>
+        </ul>
+    </nav>
+
+    <h2 class="destacado">Destacados</h2>
+
+    <div class="galer">
+        <div class="cart">
+            <img src="/imagen/jardin.jpeg" alt="Imagen 1">
+            <div class="contenido">
+                <h3>Nuevas zonas verdes</h3>
+                <p>espacios de la institucion se aprovechan para crear jardines.</p>
+            </div>
+        </div>
+        <div class="cart">
+            <img src="/imagen/Lectura.jpg" alt="Imagen 2">
+            <div class="contenido">
+                <h3>Clubes Disponibles</h3>
+                <p>Se abren inscripciones para ser parte de diferentes clubes</p>
+            </div>
+        </div>
+        <div class="cart">
+            <img src="imagen/personero.webp" alt="Imagen 3">
+            <div class="contenido">
+                <h3>Elecciones a Personeria</h3>
+                <p>Se disputa la eleccion para nuevo personero estudiantil</p>
+            </div>
+        </div>
+    </div>
+
+    <button class="toggle-btn" id="toggleBtn" onclick="toggleMenu()">☰</button>
+
+    <aside class="lateral" id="sidebar">
+        <div class="usuario-container">
+            <img class="usuario" src="imagen/user.png" alt="" width="45">
+            <a class="info" href="Informacion.html">Información personal</a>
+        </div>
+        <div class="subir-container">
+            <img class="subir" src="imagen/bxs-report.svg" alt="">
+            <a class="sub" href="#" onclick="toggleSubMenu()">Subir contenido</a>
+        </div>
+        <div class="submenu" id="submenu">
+            <button onclick="subirArchivo('imagen')">📷 Imagen</button>
+            <button onclick="subirArchivo('video')">🎥 Video</button>
+            <button onclick="subirArchivo('comentario')">📝 Comentario</button>
+        </div>
+    </aside>
+
+    <script>
+         function toggleMenu() {
+            let sidebar = document.getElementById("sidebar");
+            let toggleBtn = document.getElementById("toggleBtn");
+
+            if (sidebar.style.left === "0px") {
+                sidebar.style.left = "-260px";
+                toggleBtn.style.left = "10px"; // Vuelve el botón a su lugar
+            } else {
+                sidebar.style.left = "0px";
+                toggleBtn.style.left = "260px"; // Mueve el botón para que no desaparezca
+            }
+        }
+
+
+     function toggleSubMenu() {
+        let submenu = document.getElementById("submenu");
+        submenu.style.display = submenu.style.display === "flex" ? "none" : "flex";
+}
+
+
+        function subirArchivo(tipo) {
+            alert("Subiendo " + tipo);
+        }
+    </script>
+
+    <div class="estudiante">
+
+        <img class="estudent" src="" alt="">
+
+    </div>
+
+    <main>    
+        <section>
+            <h2 class="bien">Bienvenido al Foro</h2>
+            <p class="com">Comparte tus ideas y conoce nuevas opiniones.</p>
+        </section> 
+         
+        
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Foro Estudiantil</p>
+    </footer>
+    
+
+</body>
+</html>
