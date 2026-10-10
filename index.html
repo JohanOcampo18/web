@@ -2993,16 +2993,24 @@ function showIosHintIfNeeded() {
 // ── PWA INSTALL ──
 (function() {
   let deferredPrompt = null;
-  const btnInstall  = document.getElementById('btn-install');
-  const iosModal    = document.getElementById('ios-install-modal');
+  const btnInstall = document.getElementById('btn-install');
 
-  const isIos = () => /iphone|ipad|ipod/i.test(navigator.userAgent)
-                   && /safari/i.test(navigator.userAgent)
-                   && !/crios|fxios|edgios/i.test(navigator.userAgent);
-  const isStandalone = () => window.matchMedia('(display-mode: standalone)').matches
-                          || window.navigator.standalone === true;
+  const isStandalone = () =>
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true;
 
-  // Android / Chrome / Edge
+  const isIos = () =>
+    /iphone|ipad|ipod/i.test(navigator.userAgent) &&
+    /safari/i.test(navigator.userAgent) &&
+    !/crios|fxios|edgios/i.test(navigator.userAgent);
+
+  // Si ya está instalada como PWA, ocultar botón y salir
+  if (isStandalone()) {
+    btnInstall.hidden = true;
+    return;
+  }
+
+  // Android / Chrome / Edge desktop
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
@@ -3020,32 +3028,27 @@ function showIosHintIfNeeded() {
 
   window.addEventListener('appinstalled', () => {
     btnInstall.hidden = true;
-    if (iosModal) iosModal.hidden = true;
     showToast('✅ ¡Conexión Local instalada!');
   });
 
-  // iOS Safari
+  // iOS Safari — modal de instrucciones
   if (isIos() && !isStandalone()) {
+    const iosModal = document.getElementById('ios-install-modal');
     const dismissed = sessionStorage.getItem('ios_install_dismissed');
-    if (!dismissed) {
-      setTimeout(() => {
-        if (iosModal) iosModal.hidden = false;
-      }, 8000); // aparece a los 8s para no ser intrusivo
+    if (iosModal && !dismissed) {
+      setTimeout(() => { iosModal.hidden = false; }, 8000);
     }
   }
 
-  // Botones del modal iOS
   document.getElementById('ios-modal-close')?.addEventListener('click', () => {
-    iosModal.hidden = true;
+    document.getElementById('ios-install-modal').hidden = true;
     sessionStorage.setItem('ios_install_dismissed', '1');
   });
   document.getElementById('ios-modal-done')?.addEventListener('click', () => {
-    iosModal.hidden = true;
+    document.getElementById('ios-install-modal').hidden = true;
     sessionStorage.setItem('ios_install_dismissed', '1');
   });
 })();
-
-
 
 
 
