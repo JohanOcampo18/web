@@ -2900,15 +2900,6 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-//evita que la limpieza de cache borre contenido (boton descarga)
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  btnInstall.hidden = false;
-  // Guardar que el prompt está disponible
-  sessionStorage.setItem('pwa_prompt_available', '1');
-});
 
 // Al cargar, verificar si el prompt estuvo disponible antes
 if (sessionStorage.getItem('pwa_prompt_available') && !isStandalone()) {
