@@ -11,7 +11,7 @@
 
 <title>Conexión Local</title>
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="estilo.css">
+<link rel="stylesheet" href="estilo.css?v=20261007">
 <meta name="theme-color" content="#E8520A">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2900,6 +2900,22 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+//evita que la limpieza de cache borre contenido (boton descarga)
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  btnInstall.hidden = false;
+  // Guardar que el prompt está disponible
+  sessionStorage.setItem('pwa_prompt_available', '1');
+});
+
+// Al cargar, verificar si el prompt estuvo disponible antes
+if (sessionStorage.getItem('pwa_prompt_available') && !isStandalone()) {
+  btnInstall.hidden = false;
+}
+
+
 // Optional install prompt. The browser decides when installation is available.
 let deferredInstallPrompt = null;
 window.addEventListener('beforeinstallprompt', (event) => {
@@ -3039,6 +3055,9 @@ function showIosHintIfNeeded() {
 })();
 
 
+
+
+
 // ── DEEP LINK POR QR ──
 (function() {
   // Soporta tanto ?negocio=1 como #negocio-1
@@ -3073,27 +3092,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── NOTIFICACIÓN DE ACTUALIZACIÓN ──
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.addEventListener('message', (event) => {
-    if (event.data?.type === 'NEW_VERSION_AVAILABLE') {
-      // Toast con botón para recargar
-      const toast = document.getElementById('toast');
-      if (!toast) return;
-      toast.innerHTML = `
-        🆕 Hay una versión nueva
-        <button onclick="window.location.reload()"
-          style="margin-left:10px;background:rgba(255,255,255,0.25);
-                 border:none;color:#fff;padding:3px 10px;
-                 border-radius:12px;cursor:pointer;font-weight:700;
-                 font-family:'DM Sans',sans-serif;font-size:12px;">
-          Actualizar
-        </button>`;
-      toast.style.borderRadius = '12px';
-      toast.classList.add('show');
-      // No se cierra solo — el usuario decide cuándo recargar
+  // Ignorar el primer mensaje (instalación inicial)
+  let swJustInstalled = false;
+  navigator.serviceWorker.ready.then(reg => {
+    if (!reg.active || !navigator.serviceWorker.controller) {
+      swJustInstalled = true;
     }
   });
-}
 
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    if (event.data?.type !== 'NEW_VERSION_AVAILABLE') return;
+    if (swJustInstalled) { swJustInstalled = false; return; }
+
+    // Solo mostrar si el usuario NO acaba de recargar manualmente
+    if (sessionStorage.getItem('just_reloaded')) {
+      sessionStorage.removeItem('just_reloaded');
+      return;
+    }
+
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.innerHTML = `
+      🆕 Versión nueva disponible
+      <button onclick="sessionStorage.setItem('just_reloaded','1'); window.location.reload()"
+        style="margin-left:10px;background:rgba(255,255,255,0.25);
+               border:none;color:#fff;padding:3px 10px;
+               border-radius:12px;cursor:pointer;font-weight:700;
+               font-family:'DM Sans',sans-serif;font-size:12px;">
+        Actualizar
+      </button>`;
+    toast.classList.add('show');
+  });
+}
 
 </script>
 
