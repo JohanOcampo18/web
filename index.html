@@ -82,10 +82,12 @@ async function loadFavsCloud(uid) {
 
 window._fbSignInGoogle = async function() {
   try {
-    document.getElementById('googleBtn').classList.add('loading');
+    document.getElementById('googleBtn')?.classList.add('loading');
+    document.body.style.overflow = ''; // ← asegura que el popup pueda mostrarse
     await signInWithPopup(auth, gProvider);
   } catch(e) {
-    document.getElementById('googleBtn').classList.remove('loading');
+    document.getElementById('googleBtn')?.classList.remove('loading');
+    document.body.style.overflow = ''; // ← limpia también en error
     if (e.code !== 'auth/popup-closed-by-user')
       showToast('❌ Error al iniciar sesión');
   }
@@ -2499,14 +2501,24 @@ function hideSoftgate() {
 }
 
 function softgateLogin() {
+  // 1. Ocultar el softgate
   hideSoftgate();
-  // Abre el panel de perfil para iniciar sesión con Google
-  openProfile();
-  // Intenta disparar el login directamente
+
+  // 2. Asegurar que el body NO tenga overflow hidden antes del popup
+  document.body.style.overflow = '';
+
+  // 3. NO abrir el panel de perfil — disparar Google directamente
   if (typeof window._fbSignInGoogle === 'function') {
-    setTimeout(() => window._fbSignInGoogle(), 300);
+    // Pequeño delay para que el DOM se estabilice antes del popup
+    setTimeout(() => {
+      window._fbSignInGoogle();
+    }, 150);
+  } else {
+    // Fallback: abrir el panel de perfil si Firebase no está listo aún
+    openProfile();
   }
 }
+
 
 function softgateSkip() {
   hideSoftgate();
