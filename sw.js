@@ -1,12 +1,16 @@
 /* Conexión Local — Service Worker */
-const CACHE_NAME = 'conexion-local-v4'; // ← sube la versión para forzar actualización
+const CACHE_NAME = 'conexion-local-v7'; // ← sube la versión para forzar actualización
 const APP_SHELL = [
   './',
   './index.html',
   './estilo.css',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  'imagen/SalonBelleza.jpg',
+  'imagen/Caucaser.png',
+  'imagen/LocalTri.jpeg',
+  'imagen/HotelImagen.jpg'
 ];
 
 // ── INSTALL: guarda el app shell ──
