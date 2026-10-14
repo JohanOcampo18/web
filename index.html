@@ -11,7 +11,7 @@
 
 <title>Conexión Local</title>
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="estilo.css?v=20261007">
+<link rel="stylesheet" href="estilo.css?v=202611">
 <meta name="theme-color" content="#E8520A">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -110,7 +110,14 @@ onAuthStateChanged(auth, async (user) => {
       render(activeFilter ? data.filter(d => d.cat === activeFilter) : data);
     }
     showToast(`👋 ¡Hola, ${user.displayName.split(' ')[0]}!`);
+
+
+     // Desbloquear todo al iniciar sesión
+    if (typeof unlockFeatures === 'function') unlockFeatures();
+    sessionStorage.removeItem(SG_KEY);
+    
   }
+
   if (typeof window._fbUpdateProfileUI === 'function')
     window._fbUpdateProfileUI(user);
 });
@@ -144,6 +151,14 @@ onAuthStateChanged(auth, async (user) => {
   </div>
   
 </header>
+
+<!-- Botón flotante de WhatsApp -->
+<a href="https://wa.me/573242124682?text=Hola,%20me%20gustaría%20obtener%20más%20información" class="whatsapp-flotante" target="_blank" rel="noopener noreferrer">
+  <!-- Ícono SVG de WhatsApp -->
+  <svg viewBox="0 0 32 32" class="whatsapp-icono" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 2.003c-7.72 0-14 6.278-14 14 0 2.477.65 4.88 1.884 6.993l-1.996 7.29 7.458-1.956c2.052 1.134 4.35 1.734 6.654 1.734 7.72 0 14-6.28 14-14s-6.28-14-14-14zm0 25.617c-2.124 0-4.207-.568-6.03-1.648l-.432-.256-4.48 1.175 1.196-4.372-.28-.447c-1.187-1.897-1.815-4.103-1.815-6.353 0-6.61 5.378-11.987 11.987-11.987s11.987 5.378 11.987 11.987-5.377 11.99-11.987 11.99zm6.574-8.986c-.36-.18-2.13-.105-2.46-.118-.33-.013-.57-.018-.81.34s-.93 1.144-1.14 1.378c-.21.234-.42.264-.78.084-.36-.18-1.52-.56-2.9-1.792-1.07-1.22-1.79-2.73-2-3.09-.21-.36-.02-.555.16-.735.162-.162.36-.42.54-.63.18-.21.24-.36.36-.6.12-.24.06-.45-.03-.63-.09-.18-.81-1.955-1.11-2.675-.29-.7-.59-.605-.81-.615-.21-.01-.45-.01-.69-.01-.24 0-.63.09-.96.45s-1.26 1.23-1.26 3.003c0 1.77 1.29 3.483 1.47 3.723.18.24 2.54 3.882 6.15 5.443.86.37 1.53.593 2.05.76.86.273 1.64.234 2.26.14.69-.104 2.13-.87 2.43-1.71.3-.84.3-1.56.21-1.71-.09-.15-.33-.24-.69-.42z"/>
+  </svg>
+</a>
 
 <!-- iOS Install Modal -->
 <div class="ios-modal" id="ios-install-modal" hidden>
@@ -335,9 +350,9 @@ onAuthStateChanged(auth, async (user) => {
     <span class="cat-label">Tecnología</span>
   </div>
 
-  <div class="category" data-cat="turismo" onclick="filterCategory('turismo', this)">
-    <div class="cat-icon cat-turismo"><i class="fas fa-bus"></i></div>
-    <span class="cat-label">Turismo</span>
+  <div class="category" data-cat="transporte" onclick="filterCategory('transporte', this)">
+    <div class="cat-icon cat-transporte"><i class="fas fa-bus"></i></div>
+    <span class="cat-label">Transporte</span>
   </div>
 
   <div class="category" data-cat="discoteca" onclick="filterCategory('discoteca', this)">
@@ -617,14 +632,14 @@ onAuthStateChanged(auth, async (user) => {
 
 <script>
 const EMOJIS = {
-  comida: '🍽️', salud: '💊', servicios: '🔧', belleza: '✂️', educacion: '🎓', moda:'👕', tecnologia:'💻',turismo:'🚌',
+  comida: '🍽️', salud: '💊', servicios: '🔧', belleza: '✂️', educacion: '🎓', moda:'👕', tecnologia:'💻',transporte:'🚌',
   discoteca:'🎵', profesionales:'💼'
 };
 
 const BG_COLORS = {
   comida: '#FFF0E8', salud: '#E8F7EE', servicios: '#EEF0FF',
   belleza: '#FCEEF6', educacion: '#F3EEFF',
-  moda:'#1FE099', tecnologia: '#EEF0FF', turismo: '#0EA2C4', profesionales:'#D0872E'
+  moda:'#1FE099', tecnologia: '#EEF0FF', transporte: '#0EA2C4', profesionales:'#D0872E'
 };
 
 const PHONES = {1:'3001234567',2:'3019876543',3:'3025551234',4:'3034445678',5:'3043332211',6:'3052223344'};
@@ -1523,7 +1538,7 @@ const data = [
 {
     id: 48,
     name: 'Turisnor SAS | Transporte y Turismo',
-    cat: 'turismo',
+    cat: 'transporte',
     desc: 'Empresa de transporte y turismo del norte del Cauca. Servicios de transporte escolar, especial de pasajeros, empresarial, ejecutivo y turístico.',
     open: true,
     address: 'Carrera 26B #4-18 Barrio Emmanuel, Puerto Tejada',
@@ -1839,7 +1854,7 @@ const data = [
   {
     id: 62,
     name: 'RENACER AGENCIA DE VIAJES C&D TOURS',
-    cat: 'turismo',
+    cat: 'transporte',
     desc: 'Somos una agencia de viajes tenemos servicio de Pasadías, Excursiones, Planes Migratorios, Vacaciones, Citas para Pasaportes y Tiquetes aéreos.',
     open: true,
     address: 'Carrera 22 # 16-18 Barrio el Centro',
@@ -2728,6 +2743,21 @@ function goToOportunidades() {
       headerLogo.addEventListener('click', goHome);
       headerLogo.setAttribute('title', 'Ir al Inicio');
     }
+
+
+     // ── SOFT GATE — mostrar después de 12 segundos si no hay sesión ──
+  setTimeout(() => {
+    if (!window._fbUser && !sessionStorage.getItem(SG_KEY)) {
+      showSoftgate();
+    }
+  }, 12000);
+
+  // Aplicar candados si ya saltó el gate antes
+  if (sessionStorage.getItem(SG_KEY) && !window._fbUser) {
+    applyLockedFeatures();
+  }
+
+
   });
 
   // Teclado para galería
@@ -3085,7 +3115,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ── NOTIFICACIÓN DE ACTUALIZACIÓN ──
-if ('serviceWorker' in navigator) {
+/*if ('serviceWorker' in navigator) {
   // Ignorar el primer mensaje (instalación inicial)
   let swJustInstalled = false;
   navigator.serviceWorker.ready.then(reg => {
@@ -3094,7 +3124,7 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  navigator.serviceWorker.addEventListener('message', (event) => {
+  /*navigator.serviceWorker.addEventListener('message', (event) => {
     if (event.data?.type !== 'NEW_VERSION_AVAILABLE') return;
     if (swJustInstalled) { swJustInstalled = false; return; }
 
@@ -3116,10 +3146,130 @@ if ('serviceWorker' in navigator) {
         Actualizar
       </button>`;
     toast.classList.add('show');
-  });
+  }); */
+
+
+  // ── SOFT GATE ──
+const SG_KEY = 'cl_sg_skipped'; // recuerda si ya lo vio
+
+function showSoftgate() {
+  document.getElementById('softgateOverlay').classList.add('visible');
 }
 
+function hideSoftgate() {
+  document.getElementById('softgateOverlay').classList.remove('visible');
+}
+
+function softgateLogin() {
+  hideSoftgate();
+  // Abre el panel de perfil para iniciar sesión con Google
+  openProfile();
+  // Intenta disparar el login directamente
+  if (typeof window._fbSignInGoogle === 'function') {
+    setTimeout(() => window._fbSignInGoogle(), 300);
+  }
+}
+
+function softgateSkip() {
+  hideSoftgate();
+  sessionStorage.setItem(SG_KEY, '1');
+  applyLockedFeatures(); // aplica los candados
+}
+
+function applyLockedFeatures() {
+  if (window._fbUser) return; // con sesión: sin restricciones
+
+  // Bloquear botón de favoritos en cards
+  document.querySelectorAll('.fav-btn').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      showSoftgate();
+    };
+  });
+
+  // Bloquear botón Oportunidades en nav
+  const navOp = document.getElementById('navOportunidades');
+  if (navOp) {
+    navOp.onclick = (e) => {
+      e.stopPropagation();
+      showSoftgate();
+    };
+  }
+
+  // Bloquear botón de descarga PWA
+  const btnInstall = document.getElementById('btn-install');
+  if (btnInstall) {
+    btnInstall.classList.add('locked-feature');
+    btnInstall.onclick = (e) => {
+      e.stopPropagation();
+      showSoftgate();
+    };
+  }
+}
+
+function unlockFeatures() {
+  // Restaurar favoritos
+  document.querySelectorAll('.fav-btn').forEach(btn => {
+    const id = parseInt(btn.getAttribute('data-fav'));
+    if (id) btn.onclick = (e) => toggleFav(id, e);
+  });
+
+  // Restaurar Oportunidades
+  const navOp = document.getElementById('navOportunidades');
+  if (navOp) navOp.onclick = () => goToOportunidades();
+
+  // Restaurar PWA
+  const btnInstall = document.getElementById('btn-install');
+  if (btnInstall) {
+    btnInstall.classList.remove('locked-feature');
+    btnInstall.onclick = null; // el IIFE de PWA maneja esto
+  }
+
+  hideSoftgate();
+}
+
+// Bloquear WhatsApp dentro del modal
+const _origOpenModal = openModal;
+window.openModal = function(id) {
+  _origOpenModal(id);
+  if (!window._fbUser) {
+    const waBtn = document.getElementById('modalWA');
+    if (waBtn) {
+      waBtn.onclick = (e) => {
+        e.preventDefault();
+        showSoftgate();
+      };
+      waBtn.style.opacity = '0.5';
+    }
+  }
+};
+  
 </script>
+
+<!-- SOFT GATE MODAL -->
+<div class="softgate-overlay" id="softgateOverlay">
+  <div class="softgate-modal">
+    <div class="softgate-icon">🌟</div>
+    <h2 class="softgate-title">¡Bienvenido a Conexión Local!</h2>
+    <p class="softgate-desc">
+      Inicia sesión para acceder a <strong>favoritos, oportunidades de empleo, 
+      contacto con negocios</strong> y mucho más.
+    </p>
+    <button class="softgate-google-btn" onclick="softgateLogin()">
+      <svg viewBox="0 0 24 24" width="20" height="20">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      Continuar con Google
+    </button>
+    <button class="softgate-skip-btn" onclick="softgateSkip()">
+      Explorar sin cuenta →
+    </button>
+    <p class="softgate-note">Solo lectura · Sin registro previo</p>
+  </div>
+</div>
 
 </body>
 </html>

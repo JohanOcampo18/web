@@ -116,6 +116,57 @@ header {
 body.dark .dark-toggle { background: rgba(232,82,10,0.18); }
 
 
+/* =========================================
+   Estilos por defecto (Para PC / Escritorio) 
+   ========================================= */
+.whatsapp-flotante {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 40px; /* Distancia desde abajo en PC */
+  right: 40px;  /* Distancia desde la derecha en PC */
+  background-color: #25d366;
+  color: #FFF;
+  border-radius: 50px;
+  text-align: center;
+  font-size: 30px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.whatsapp-flotante:hover {
+  background-color: #128c7e;
+  transform: scale(1.1);
+  box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.4);
+}
+
+.whatsapp-icono {
+  width: 35px;
+  height: 35px;
+  fill: currentColor;
+}
+
+/* =========================================
+   Estilos para Móviles (Pantallas pequeñas) 
+   ========================================= */
+@media screen and (max-width: 768px) {
+  .whatsapp-flotante {
+    width: 55px; /* Un poco más pequeño en móvil */
+    height: 55px;
+    bottom: 90px; /* Más alto para no tapar tu barra de navegación inferior */
+    right: 20px;  /* Un poco más pegado al borde derecho */
+  }
+  
+  .whatsapp-icono {
+    width: 30px; /* Ícono adaptado al nuevo tamaño */
+    height: 30px;
+  }
+}
+
 
 /* ── HERO CAROUSEL ── */
 .hero-carousel {
@@ -578,7 +629,7 @@ body.dark .dark-toggle { background: rgba(232,82,10,0.18); }
 .cat-educacion { background: #FFFAE8; color: #C89A00; }
 .cat-todos   { background: #F1EDE8; color: #5C4033; }
 .cat-tecnologia { background: #f7f7f7; color:#05010c ; }
-.cat-turismo { background: #b4dee7; color:#1d7398 ; }
+.cat-transporte { background: #b4dee7; color:#1d7398 ; }
 .cat-moda { background: #ed9b9bd5; color:#fff3f3 ; }
 .cat-discoteca { background: #c0abef; color:#1c054f ; }
 .cat-profesionales { background: #ecc28e; color:#8a591d ; }
@@ -987,6 +1038,127 @@ a:hover .map-placeholder {
 @keyframes navPill {
   from { width: 0; opacity: 0; }
   to   { width: 32px; opacity: 1; }
+}
+
+/* ── BOTÓN DESTACADO OPORTUNIDADES (BRILLO Y LLAMADO DE ATENCIÓN) ── */
+#navOportunidades {
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: rgba(232, 82, 10, 0.08);
+  border: 1px solid rgba(232, 82, 10, 0.28);
+  color: var(--primary);
+  position: relative;
+  transition: all 0.25s ease;
+  animation: navOpGlow 2.8s ease-in-out infinite;
+}
+
+#navOportunidades span {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Ráfaga / barrido de brillo diagonal */
+#navOportunidades::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.65) 45%,
+    rgba(255, 240, 220, 0.9) 50%,
+    rgba(255, 255, 255, 0.65) 55%,
+    transparent 80%
+  );
+  background-size: 250% 100%;
+  background-repeat: no-repeat;
+  background-position: 200% 0;
+  pointer-events: none;
+  animation: navOpShine 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Destello y micro-pulsación en el icono de maletín */
+#navOportunidades:not(.active) i {
+  animation: navOpIconPulse 3.2s ease-in-out infinite;
+}
+
+/* Modo oscuro */
+body.dark #navOportunidades {
+  background: rgba(232, 82, 10, 0.16);
+  border-color: rgba(232, 82, 10, 0.45);
+}
+
+body.dark #navOportunidades::after {
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.45) 45%,
+    rgba(255, 215, 170, 0.8) 50%,
+    rgba(255, 255, 255, 0.45) 55%,
+    transparent 80%
+  );
+  background-size: 250% 100%;
+  background-repeat: no-repeat;
+}
+
+/* Estado activo: cuando el usuario ya está viendo Oportunidades */
+#navOportunidades.active {
+  background: rgba(232, 82, 10, 0.14);
+  border-color: rgba(232, 82, 10, 0.4);
+  box-shadow: 0 0 12px rgba(232, 82, 10, 0.35);
+  animation: none;
+}
+
+#navOportunidades.active::after {
+  display: none;
+}
+
+#navOportunidades.active i {
+  animation: none;
+  filter: drop-shadow(0 0 4px rgba(232, 82, 10, 0.5));
+}
+
+/* Animaciones del efecto de brillo */
+@keyframes navOpGlow {
+  0%, 100% {
+    box-shadow: 0 0 4px rgba(232, 82, 10, 0.25), 0 0 0 1px rgba(232, 82, 10, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(232, 82, 10, 0.55), 0 0 26px rgba(232, 82, 10, 0.25), 0 0 0 1px rgba(232, 82, 10, 0.4);
+  }
+}
+
+@keyframes navOpShine {
+  0% {
+    background-position: 200% 0;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  42% {
+    background-position: -150% 0;
+    opacity: 1;
+  }
+  48%, 100% {
+    background-position: -150% 0;
+    opacity: 0;
+  }
+}
+
+@keyframes navOpIconPulse {
+  0%, 42%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 2px rgba(232, 82, 10, 0.3));
+  }
+  20% {
+    transform: scale(1.18);
+    filter: drop-shadow(0 0 8px rgba(232, 82, 10, 0.95)) drop-shadow(0 0 12px rgba(255, 215, 120, 0.85));
+  }
+  30% {
+    transform: scale(1.05);
+  }
 }
 
 /* ── LOGIN / PROFILE MODAL ── */
@@ -2724,4 +2896,135 @@ body.dark .op-card-placeholder {
   .op-grid {
     grid-template-columns: 1fr;
   }
+}
+
+
+/* ── SOFT GATE ── */
+.softgate-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 88888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.softgate-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.softgate-modal {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px 28px;
+  max-width: 360px;
+  width: 90%;
+  text-align: center;
+  box-shadow: var(--shadow-premium);
+  animation: sgSlideUp 0.4s cubic-bezier(0.34,1.4,0.64,1) both;
+}
+
+@keyframes sgSlideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.softgate-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  display: block;
+  animation: sgBounce 1.5s ease infinite;
+}
+
+@keyframes sgBounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+.softgate-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.softgate-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.softgate-desc strong { color: var(--primary); }
+
+.softgate-google-btn {
+  width: 100%;
+  padding: 13px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--text);
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s, transform 0.15s;
+  margin-bottom: 10px;
+}
+
+.softgate-google-btn:hover  { box-shadow: var(--shadow-hover); }
+.softgate-google-btn:active { transform: scale(0.97); }
+
+.softgate-skip-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px;
+  width: 100%;
+  transition: color 0.2s;
+}
+
+.softgate-skip-btn:hover { color: var(--primary); }
+
+.softgate-note {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  opacity: 0.6;
+}
+
+/* Elementos bloqueados para usuarios sin sesión */
+.locked-feature {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.45;
+  filter: grayscale(0.3);
+}
+
+.locked-feature::after {
+  content: '🔒';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  pointer-events: none;
+  z-index: 10;
 }
