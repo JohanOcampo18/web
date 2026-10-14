@@ -2487,6 +2487,103 @@ function closeProfileOutside(e) {
   if (e.target === document.getElementById('profileOverlay')) closeProfile();
 }
 
+// ── SOFT GATE ──
+const SG_KEY = 'cl_sg_skipped'; // recuerda si ya lo vio
+
+function showSoftgate() {
+  document.getElementById('softgateOverlay').classList.add('visible');
+}
+
+function hideSoftgate() {
+  document.getElementById('softgateOverlay').classList.remove('visible');
+}
+
+function softgateLogin() {
+  hideSoftgate();
+  // Abre el panel de perfil para iniciar sesión con Google
+  openProfile();
+  // Intenta disparar el login directamente
+  if (typeof window._fbSignInGoogle === 'function') {
+    setTimeout(() => window._fbSignInGoogle(), 300);
+  }
+}
+
+function softgateSkip() {
+  hideSoftgate();
+  sessionStorage.setItem(SG_KEY, '1');
+  applyLockedFeatures(); // aplica los candados
+}
+
+function applyLockedFeatures() {
+  if (window._fbUser) return; // con sesión: sin restricciones
+
+  // Bloquear botón de favoritos en cards
+  document.querySelectorAll('.fav-btn').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      showSoftgate();
+    };
+  });
+
+  // Bloquear botón Oportunidades en nav
+  const navOp = document.getElementById('navOportunidades');
+  if (navOp) {
+    navOp.onclick = (e) => {
+      e.stopPropagation();
+      showSoftgate();
+    };
+  }
+
+  // Bloquear botón de descarga PWA
+  const btnInstall = document.getElementById('btn-install');
+  if (btnInstall) {
+    btnInstall.classList.add('locked-feature');
+    btnInstall.onclick = (e) => {
+      e.stopPropagation();
+      showSoftgate();
+    };
+  }
+}
+
+function unlockFeatures() {
+  // Restaurar favoritos
+  document.querySelectorAll('.fav-btn').forEach(btn => {
+    const id = parseInt(btn.getAttribute('data-fav'));
+    if (id) btn.onclick = (e) => toggleFav(id, e);
+  });
+
+  // Restaurar Oportunidades
+  const navOp = document.getElementById('navOportunidades');
+  if (navOp) navOp.onclick = () => goToOportunidades();
+
+  // Restaurar PWA
+  const btnInstall = document.getElementById('btn-install');
+  if (btnInstall) {
+    btnInstall.classList.remove('locked-feature');
+    btnInstall.onclick = null; // el IIFE de PWA maneja esto
+  }
+
+  hideSoftgate();
+}
+
+// Bloquear WhatsApp dentro del modal
+const _origOpenModal = openModal;
+window.openModal = function(id) {
+  _origOpenModal(id);
+  if (!window._fbUser) {
+    const waBtn = document.getElementById('modalWA');
+    if (waBtn) {
+      waBtn.onclick = (e) => {
+        e.preventDefault();
+        showSoftgate();
+      };
+      waBtn.style.opacity = '0.5';
+    }
+  }
+};
+
+
+
 // Actualiza el panel según el estado de Firebase
 window._fbUpdateProfileUI = function(user) {
   const out = document.getElementById('viewLoggedOut');
@@ -2745,12 +2842,12 @@ function goToOportunidades() {
     }
 
 
-     // ── SOFT GATE — mostrar después de 12 segundos si no hay sesión ──
+     // ── SOFT GATE — mostrar después de 6 segundos si no hay sesión ──
   setTimeout(() => {
     if (!window._fbUser && !sessionStorage.getItem(SG_KEY)) {
       showSoftgate();
     }
-  }, 12000);
+  }, 6000);
 
   // Aplicar candados si ya saltó el gate antes
   if (sessionStorage.getItem(SG_KEY) && !window._fbUser) {
@@ -3148,101 +3245,6 @@ document.addEventListener('DOMContentLoaded', () => {
     toast.classList.add('show');
   }); */
 
-
-  // ── SOFT GATE ──
-const SG_KEY = 'cl_sg_skipped'; // recuerda si ya lo vio
-
-function showSoftgate() {
-  document.getElementById('softgateOverlay').classList.add('visible');
-}
-
-function hideSoftgate() {
-  document.getElementById('softgateOverlay').classList.remove('visible');
-}
-
-function softgateLogin() {
-  hideSoftgate();
-  // Abre el panel de perfil para iniciar sesión con Google
-  openProfile();
-  // Intenta disparar el login directamente
-  if (typeof window._fbSignInGoogle === 'function') {
-    setTimeout(() => window._fbSignInGoogle(), 300);
-  }
-}
-
-function softgateSkip() {
-  hideSoftgate();
-  sessionStorage.setItem(SG_KEY, '1');
-  applyLockedFeatures(); // aplica los candados
-}
-
-function applyLockedFeatures() {
-  if (window._fbUser) return; // con sesión: sin restricciones
-
-  // Bloquear botón de favoritos en cards
-  document.querySelectorAll('.fav-btn').forEach(btn => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      showSoftgate();
-    };
-  });
-
-  // Bloquear botón Oportunidades en nav
-  const navOp = document.getElementById('navOportunidades');
-  if (navOp) {
-    navOp.onclick = (e) => {
-      e.stopPropagation();
-      showSoftgate();
-    };
-  }
-
-  // Bloquear botón de descarga PWA
-  const btnInstall = document.getElementById('btn-install');
-  if (btnInstall) {
-    btnInstall.classList.add('locked-feature');
-    btnInstall.onclick = (e) => {
-      e.stopPropagation();
-      showSoftgate();
-    };
-  }
-}
-
-function unlockFeatures() {
-  // Restaurar favoritos
-  document.querySelectorAll('.fav-btn').forEach(btn => {
-    const id = parseInt(btn.getAttribute('data-fav'));
-    if (id) btn.onclick = (e) => toggleFav(id, e);
-  });
-
-  // Restaurar Oportunidades
-  const navOp = document.getElementById('navOportunidades');
-  if (navOp) navOp.onclick = () => goToOportunidades();
-
-  // Restaurar PWA
-  const btnInstall = document.getElementById('btn-install');
-  if (btnInstall) {
-    btnInstall.classList.remove('locked-feature');
-    btnInstall.onclick = null; // el IIFE de PWA maneja esto
-  }
-
-  hideSoftgate();
-}
-
-// Bloquear WhatsApp dentro del modal
-const _origOpenModal = openModal;
-window.openModal = function(id) {
-  _origOpenModal(id);
-  if (!window._fbUser) {
-    const waBtn = document.getElementById('modalWA');
-    if (waBtn) {
-      waBtn.onclick = (e) => {
-        e.preventDefault();
-        showSoftgate();
-      };
-      waBtn.style.opacity = '0.5';
-    }
-  }
-};
   
 </script>
 
